@@ -37,7 +37,7 @@ class CameraExample extends React.Component {
         <Text>                              Lightbot                             </Text>
         {!!messageArr[0] && <Text
                   style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                  {`Hello, ${messageArr[0].message.split(' ')[0]} ${messageArr[0].message.split(' ')[1]}!`}
+                  {`Hello, ${messageArr[messageArr.length-1].message.split(' ')[0]} ${messageArr[messageArr.length-1].message.split(' ')[1]}!`}
                 </Text>}
           <Camera 
             style={{ flex: 1 }}
