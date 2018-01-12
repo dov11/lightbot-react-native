@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions } from 'expo';
+import sendPhoto from '../actions/sendPhoto'
 
-export default class CameraExample extends React.Component {
+class CameraExample extends React.Component {
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
@@ -12,17 +14,19 @@ export default class CameraExample extends React.Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   }
-  takePicture = () => event => {
-      console.log('took')
-    if (this.camera) {
-      this.camera.takePictureAsync().then(data => {
-          console.log('data:', data)
-      });
-    }
-};
+//   takePicture = () => event => {
+//       console.log('took')
+//     if (this.camera) {
+//       this.camera.takePictureAsync().then(data => {
+//           console.log('data:', data)
+          
+//       });
+//     }
+// };
   render() {
       const { hasCameraPermission } = this.state;
-      console.log(this.state, 'here')
+      const messageArr = this.props.messageArray
+      console.log(this.props.messageArray, 'message array')
     if (hasCameraPermission === null) {
       return <View />;
     } else if (hasCameraPermission === false) {
@@ -30,7 +34,11 @@ export default class CameraExample extends React.Component {
     } else {
       return (
         <View style={{ flex: 1 }}>
-        <Text>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz</Text>
+        <Text>                              Lightbot                             </Text>
+        {!!messageArr[0] && <Text
+                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+                  {`Hello, ${messageArr[messageArr.length-1].message.split(' ')[0]} ${messageArr[messageArr.length-1].message.split(' ')[1]}!`}
+                </Text>}
           <Camera 
             style={{ flex: 1 }}
             ref={ref => {
@@ -65,16 +73,16 @@ export default class CameraExample extends React.Component {
                 style={[{ flex: 0.3, alignSelf: 'flex-end' }]}
                 onPress={() => {
                     console.log('took')
-                    this.camera.takePictureAsync({quality: 0.5, base64: true}).then(data => {
-                        console.log(data.base64)
-                        console.log(data.width)
+                    this.camera.takePictureAsync({quality: 0.1, base64: true}).then(data => {
+                        console.log(data.base64.slice(100, 115))
+                        this.props.sendPhoto(data.base64)
                     });
               }}>
                 <Text
                   style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> 
                     SNAP
                  </Text>
-</TouchableOpacity>
+              </TouchableOpacity>
             </View>
           </Camera>
         </View>
@@ -82,4 +90,9 @@ export default class CameraExample extends React.Component {
     }
   }
 }
+const mapStateToProps = (state) => {
 
+  return { messageArray: state.messages }
+}
+
+export default connect(mapStateToProps, { sendPhoto })(CameraExample)
