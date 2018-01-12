@@ -23,6 +23,9 @@
   "dependencies": {
     "expo": "^23.0.4",
     "react": "16.0.0",
-    "react-native": "0.50.3"
+    "react-native": "0.50.3",
+    "react-native-router-flux": "^4.0.0-beta.27",
+    "redux-thunk": "^2.2.0",
+    "superagent": "^3.8.2"
   }
 }
