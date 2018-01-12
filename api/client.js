@@ -1,28 +1,22 @@
 import request from "superagent";
 
 export default class ApiClient {
-	// defaultOptions = {
-	// 	tokenStorageKey: "helloApiJWT"
-	// };
 
 	constructor(host, options = {}) {
-		this.host = "http://273ea4c5.eu.ngrok.io" //"http://localhost:3030";
+		this.host = host || "http://273ea4c5.eu.ngrok.io" //"http://localhost:3030";
 		this.options = { 
             // ...this.defaultOptions,
              ...options };
 	}
 
 	get(path) {
-        console.log('did get')
-		return request.get(this.createUrl(path)).set(this.headers()).set('user-agent', 'Android');
+        return request.get(this.createUrl(path)).set(this.headers());
 	}
 
 	post(path, data = {}) {
-        console.log('did post', data, this.createUrl(path))
 		return request
 			.post(this.createUrl(path))
             .set(this.headers())
-            .set('user-agent', 'Android')
 			.send(data);
 	}
 
@@ -44,36 +38,15 @@ export default class ApiClient {
 		return request.delete(this.createUrl(path)).set(this.headers());
 	}
 
-	// signOut() {
-	// 	localStorage.removeItem(this.options.tokenStorageKey);
-	// }
-
 	headers() {
 		let headers = {
 			Accept: "application/json"
 		};
 
-		// if (this.isAuthenticated()) {
-		// 	headers.Authorization = `Bearer ${this.getToken()}`;
-		// }
-
 		return headers;
 	}
 
-	// isAuthenticated() {
-	// 	return !!this.getToken();
-	// }
-
-	// Create a full URL to our API, including the host and path
 	createUrl(path) {
 		return [this.host, path].join("/");
 	}
-
-	// getToken() {
-	// 	return localStorage.getItem(this.options.tokenStorageKey);
-	// }
-
-	// storeToken(token) {
-	// 	localStorage.setItem(this.options.tokenStorageKey, token);
-	// }
 }
