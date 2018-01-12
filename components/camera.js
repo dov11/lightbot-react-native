@@ -25,7 +25,8 @@ class CameraExample extends React.Component {
 // };
   render() {
       const { hasCameraPermission } = this.state;
-      console.log(this.state, 'here')
+      const messageArr = this.props.messageArray
+      console.log(this.props.messageArray, 'message array')
     if (hasCameraPermission === null) {
       return <View />;
     } else if (hasCameraPermission === false) {
@@ -33,7 +34,11 @@ class CameraExample extends React.Component {
     } else {
       return (
         <View style={{ flex: 1 }}>
-        <Text>                          zzz                             </Text>
+        <Text>                              Lightbot                             </Text>
+        {!!messageArr[0] && <Text
+                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+                  {`Hello, ${messageArr[0].message.split(' ')[0]} ${messageArr[0].message.split(' ')[1]}!`}
+                </Text>}
           <Camera 
             style={{ flex: 1 }}
             ref={ref => {
@@ -77,7 +82,7 @@ class CameraExample extends React.Component {
                   style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> 
                     SNAP
                  </Text>
-</TouchableOpacity>
+              </TouchableOpacity>
             </View>
           </Camera>
         </View>
@@ -85,5 +90,9 @@ class CameraExample extends React.Component {
     }
   }
 }
+const mapStateToProps = (state) => {
 
-export default connect(null, { sendPhoto })(CameraExample)
+  return { messageArray: state.messages }
+}
+
+export default connect(mapStateToProps, { sendPhoto })(CameraExample)

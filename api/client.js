@@ -3,7 +3,7 @@ import request from "superagent";
 export default class ApiClient {
 
 	constructor(host, options = {}) {
-		this.host = host || "http://273ea4c5.eu.ngrok.io" //"http://localhost:3030";
+		this.host = host || "https://e96228b0.eu.ngrok.io" //"http://localhost:3030";
 		this.options = { 
             // ...this.defaultOptions,
              ...options };

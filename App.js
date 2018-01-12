@@ -6,26 +6,26 @@ import { AppState, StyleSheet, Text, View } from 'react-native';
 import CameraExample from './components/camera'
 
 export default class App extends React.Component {
-  state = {
-    appState: AppState.currentState
-  }
+//   state = {
+//     appState: AppState.currentState
+//   }
 
-  componentDidMount() {
-    AppState.addEventListener('change', this._handleAppStateChange);
-  }
+//   componentDidMount() {
+//     AppState.addEventListener('change', this._handleAppStateChange);
+//   }
 
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
-  }
+//   componentWillUnmount() {
+//     AppState.removeEventListener('change', this._handleAppStateChange);
+//   }
 
-  _handleAppStateChange = (nextAppState) => {
-    console.log(nextAppState, this.state)
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-      console.log('App has come to the foreground!')
-      // store.dispatch(loadMessages());
-    }
-    this.setState({appState: nextAppState});
-}
+//   _handleAppStateChange = (nextAppState) => {
+//     console.log(nextAppState, this.state)
+//     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+//       console.log('App has come to the foreground!')
+//       // store.dispatch(loadMessages());
+//     }
+//     this.setState({appState: nextAppState});
+// }
   render() {
     return (
       <Provider store={store}>
