@@ -14,19 +14,19 @@ class CameraExample extends React.Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   }
-//   takePicture = () => event => {
-//       console.log('took')
-//     if (this.camera) {
-//       this.camera.takePictureAsync().then(data => {
-//           console.log('data:', data)
-          
-//       });
-//     }
-// };
+  
+  takePicture = () => {
+    this.camera.takePictureAsync({quality: 0.1, base64: true}).then(data => {
+      console.log('takePicture', data)
+      this.props.sendPhoto(data.base64)
+    });  
+  }
   render() {
-      const { hasCameraPermission } = this.state;
-      const messageArr = this.props.messageArray
-      console.log(this.props.messageArray, 'message array')
+    let counter = 0
+    const { hasCameraPermission } = this.state;
+    const messageArr = this.props.messageArray
+    const messageNullArr = messageArr.filter(el=>el===null)
+    console.log(this.props.messageArray, 'message array')
     if (hasCameraPermission === null) {
       return <View />;
     } else if (hasCameraPermission === false) {
@@ -34,11 +34,13 @@ class CameraExample extends React.Component {
     } else {
       return (
         <View style={{ flex: 1 }}>
-        <Text>                              Lightbot                             </Text>
-        {!!messageArr[0] && <Text
-                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                  {`Hello, ${messageArr[messageArr.length-1].message.split(' ')[0]} ${messageArr[messageArr.length-1].message.split(' ')[1]}!`}
-                </Text>}
+          <Text>                              Lightbot                             </Text>
+          {!!messageArr[messageArr.length-1] && !!messageArr[messageArr.length-1].message 
+            && <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+                {`Hello, ${messageArr[messageArr.length-1].message.split(' ')[0]} ${messageArr[messageArr.length-1].message.split(' ')[1]}!`}
+              </Text>
+          }
+
           <Camera 
             style={{ flex: 1 }}
             ref={ref => {
@@ -51,9 +53,11 @@ class CameraExample extends React.Component {
                 backgroundColor: 'transparent',
                 flexDirection: 'row',
               }}>
+
               <TouchableOpacity
                 style={{
                   flex: 0.1,
+                  marginLeft: 10,
                   alignSelf: 'flex-end',
                   alignItems: 'center',
                 }}
@@ -69,22 +73,18 @@ class CameraExample extends React.Component {
                   {' '}Flip{' '}
                 </Text>
               </TouchableOpacity>
+
               <TouchableOpacity
-                style={[{ flex: 0.3, alignSelf: 'flex-end' }]}
-                onPress={() => {
-                    console.log('took')
-                    this.camera.takePictureAsync({quality: 0.1, base64: true}).then(data => {
-                        console.log(data.base64.slice(100, 115))
-                        this.props.sendPhoto(data.base64)
-                    });
-              }}>
+                style={[{ flex: 0.3, marginLeft: 10, alignSelf: 'flex-end' }]}
+                onPress={this.takePicture}>
                 <Text
                   style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> 
-                    SNAP
+                    Snap
                  </Text>
               </TouchableOpacity>
             </View>
           </Camera>
+          <Text>Bottom</Text>
         </View>
       );
     }
