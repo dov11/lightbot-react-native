@@ -1,0 +1,1 @@
+export const NOT_RECOGNIZED = 'NOT_RECOGNIZED'

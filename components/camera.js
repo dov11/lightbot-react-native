@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions } from 'expo';
 import sendPhoto from '../actions/sendPhoto'
+// import notRecognized from '../actions/loading'
 
 class CameraExample extends React.Component {
   state = {
@@ -22,11 +23,17 @@ class CameraExample extends React.Component {
     });  
   }
   render() {
-    let counter = 0
     const { hasCameraPermission } = this.state;
-    const messageArr = this.props.messageArray
-    const messageNullArr = messageArr.filter(el=>el===null)
-    console.log(this.props.messageArray, 'message array')
+    const { messageArray, loading, recognitions } = this.props
+    console.log('messageArray:', messageArray)
+    // const messageNullArr = messageArray.filter(el=>el===null)
+    // console.log(this.props.messageArray, 'message array')
+    const lastMessage = messageArray[messageArray.length-1]
+    if (lastMessage && lastMessage.message===null && !loading && recognitions<10) {
+      console.log('here', lastMessage.message)
+      this.takePicture()
+      // this.props.notRecognized()
+    }
     if (hasCameraPermission === null) {
       return <View />;
     } else if (hasCameraPermission === false) {
@@ -35,9 +42,9 @@ class CameraExample extends React.Component {
       return (
         <View style={{ flex: 1 }}>
           <Text>                              Lightbot                             </Text>
-          {!!messageArr[messageArr.length-1] && !!messageArr[messageArr.length-1].message 
+          {!!lastMessage && !!lastMessage.message 
             && <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                {`Hello, ${messageArr[messageArr.length-1].message.split(' ')[0]} ${messageArr[messageArr.length-1].message.split(' ')[1]}!`}
+                {`Hello, ${lastMessage.message.split(' ')[0]} ${lastMessage.message.split(' ')[1]}!`}
               </Text>
           }
 
@@ -92,7 +99,12 @@ class CameraExample extends React.Component {
 }
 const mapStateToProps = (state) => {
 
-  return { messageArray: state.messages }
+  return { 
+    messageArray: state.messages, 
+    loading: state.loading, 
+    recognitions: state.recognizing
+  }
+
 }
 
 export default connect(mapStateToProps, { sendPhoto })(CameraExample)
