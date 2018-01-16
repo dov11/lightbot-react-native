@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions } from 'expo';
 import sendPhoto from '../actions/sendPhoto'
+import startRecognizing from '../actions/recognizing'
 // import notRecognized from '../actions/loading'
 
 class CameraExample extends React.Component {
@@ -83,7 +84,10 @@ class CameraExample extends React.Component {
 
               <TouchableOpacity
                 style={[{ flex: 0.3, marginLeft: 10, alignSelf: 'flex-end' }]}
-                onPress={this.takePicture}>
+                onPress={() => {
+                  this.takePicture()
+                  this.props.startRecognizing()
+                  }}>
                 <Text
                   style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> 
                     Snap
@@ -107,4 +111,4 @@ const mapStateToProps = (state) => {
 
 }
 
-export default connect(mapStateToProps, { sendPhoto })(CameraExample)
+export default connect(mapStateToProps, { sendPhoto, startRecognizing })(CameraExample)
